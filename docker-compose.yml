@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  my_server:
+    container_name: web_server
+    build: .
+    ports:
+      - 88:80
+    volumes:
+      - ./crud:/var/www/html/
+    networks:
+      - ahmad-network
+    depends_on:
+      - my_database
+
+  my_database:
+    container_name: database
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ahmad
+      MYSQL_DATABASE: ahmad_db
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d/
+      - ahmad_volume:/var/lib/mysql
+    networks:
+      - ahmad-network
+
+volumes:
+  ahmad_volume:
+
+networks:
+  ahmad-network:
